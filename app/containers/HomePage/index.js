@@ -106,6 +106,19 @@ export function mapDispatchToProps(dispatch) {
     onSubmitForm: (evt) => {
       if (evt !== undefined && evt.preventDefault) evt.preventDefault();
       dispatch(loadRepos());
+
+      //WebSocket("ws://" + '127.0.0.1:8000' + "/chat/");
+      /*socket.onmessage = (e) => {
+            console.log(e.data);
+      }
+      socket.onopen = function() {
+        console.log("want to subscribe")
+//            socket.send("subscribe");
+      }
+      // Call onopen directly if socket is already open
+      // if (socket.readyState == WebSocket.OPEN) socket.onopen();
+      //
+      //*/
     },
   };
 }

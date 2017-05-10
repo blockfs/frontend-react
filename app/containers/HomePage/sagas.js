@@ -14,17 +14,28 @@ import { makeSelectUsername } from 'containers/HomePage/selectors';
  * Github repos request/response handler
  */
 export function* getRepos() {
-  // Select username from store
-  const username = yield select(makeSelectUsername());
-  const requestURL = `https://api.github.com/users/${username}/repos?type=all&sort=updated`;
-
-  try {
+      console.log("I am in getRepos")
+      const socket = new WebSocket("ws://" + '127.0.0.1:8000' + "/chat/");
+      console.log("I am starting socket")
+      socket.onmessage = (e) => {
+            console.log(e.data);
+      }
+      console.log("I have attached onmessage")
+            //yield put(reposLoaded([e.data], '')
+      socket.onopen = function() {
+        console.log("want to subscribe")
+            socket.send("subscribe");
+      }
+      // Call onopen directly if socket is already open
+      if (socket.readyState == WebSocket.OPEN) socket.onopen();
+  /*try {
     // Call our request helper (see 'utils/request')
     const repos = yield call(request, requestURL);
     yield put(reposLoaded(repos, username));
   } catch (err) {
     yield put(repoLoadingError(err));
   }
+  */
 }
 
 /**
