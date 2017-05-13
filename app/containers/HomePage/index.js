@@ -10,74 +10,85 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { makeSelectRepos, makeSelectLoading, makeSelectError } from 'containers/App/selectors';
+import { makeSelectBlocks, makeSelectLoading, makeSelectError } from 'containers/App/selectors';
 import H2 from 'components/H2';
-import ReposList from 'components/ReposList';
+import BlocksList from 'components/BlocksList';
+import BlockListItem from 'containers/BlockListItem';
 import AtPrefix from './AtPrefix';
 import CenteredSection from './CenteredSection';
 import Form from './Form';
 import Input from './Input';
 import Section from './Section';
 import messages from './messages';
-import { loadRepos } from '../App/actions';
+import { loadBlocks } from '../App/actions';
 import { changeUsername } from './actions';
 import { makeSelectUsername } from './selectors';
+import Wrapper from './Wrapper';
 
 export class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
-  /**
-   * when initial state username is not null, submit the form to load repos
-   */
+
+  constructor(properties) {
+    super(properties);
+    this.state = {loading: true, error: false, blocks: []};
+  }
+
   componentDidMount() {
-    if (this.props.username && this.props.username.trim().length > 0) {
-      this.props.onSubmitForm();
+    this.setSocketConnection()
+  }
+
+  setSocketConnection(){
+    const socket = new WebSocket("ws://" + '127.0.0.1:8000' + "/chat/");
+    console.log("I am starting socket")
+    socket.onmessage = (e) => {
+       if (e.data != "Subscribed to all messages.") {
+           let data = JSON.parse(e.data)
+           // only use block data
+           if(data.block_number){
+             console.log('-------------------------------')
+             console.log("WEB-SOCKET BLOCK DATA: ", data)
+             var allBlocks = this.state.blocks
+             allBlocks.unshift(data)
+             this.setState({blocks: allBlocks, loading: false})
+             console.log("STATE BLOCKS: ", this.state.blocks)
+             this.forceUpdate()
+           }
+        }
     }
+    socket.onopen = function() {
+      console.log("want to subscribe");
+      socket.send("subscribe");
+    }
+    // Call onopen directly if socket is already open
+    if (socket.readyState == WebSocket.OPEN) socket.onopen();
   }
 
   render() {
-    const { loading, error, repos } = this.props;
-    const reposListProps = {
-      loading,
-      error,
-      repos,
-    };
-
     return (
       <article>
         <Helmet
-          title="Home Page"
+          title="BlockFS"
           meta={[
-            { name: 'description', content: 'A React.js Boilerplate application homepage' },
+            { name: '', content: '' },
           ]}
         />
         <div>
-          <CenteredSection>
-            <H2>
-              <FormattedMessage {...messages.startProjectHeader} />
-            </H2>
-            <p>
-              <FormattedMessage {...messages.startProjectMessage} />
-            </p>
-          </CenteredSection>
+          {
+          // <CenteredSection>
+          //   <H2>
+          //     <FormattedMessage {...messages.startProjectHeader} />
+          //   </H2>
+          //   <p>
+          //     <FormattedMessage {...messages.startProjectMessage} />
+          //   </p>
+          // </CenteredSection>
+          }
           <Section>
             <H2>
-              <FormattedMessage {...messages.trymeHeader} />
+              Blocks
             </H2>
-            <Form onSubmit={this.props.onSubmitForm}>
-              <label htmlFor="username">
-                <FormattedMessage {...messages.trymeMessage} />
-                <AtPrefix>
-                  <FormattedMessage {...messages.trymeAtPrefix} />
-                </AtPrefix>
-                <Input
-                  id="username"
-                  type="text"
-                  placeholder="mxstbr"
-                  value={this.props.username}
-                  onChange={this.props.onChangeUsername}
-                />
-              </label>
-            </Form>
-            <ReposList {...reposListProps} />
+            <Wrapper>
+              <BlocksList {...this.state} />
+            </Wrapper>
           </Section>
         </div>
       </article>
@@ -91,40 +102,23 @@ HomePage.propTypes = {
     React.PropTypes.object,
     React.PropTypes.bool,
   ]),
-  repos: React.PropTypes.oneOfType([
+  blocks: React.PropTypes.oneOfType([
     React.PropTypes.array,
     React.PropTypes.bool,
-  ]),
-  onSubmitForm: React.PropTypes.func,
-  username: React.PropTypes.string,
-  onChangeUsername: React.PropTypes.func,
+  ])
 };
 
 export function mapDispatchToProps(dispatch) {
   return {
-    onChangeUsername: (evt) => dispatch(changeUsername(evt.target.value)),
-    onSubmitForm: (evt) => {
+    showBlocks: (evt) => {
       if (evt !== undefined && evt.preventDefault) evt.preventDefault();
-      dispatch(loadRepos());
-
-      //WebSocket("ws://" + '127.0.0.1:8000' + "/chat/");
-      /*socket.onmessage = (e) => {
-            console.log(e.data);
-      }
-      socket.onopen = function() {
-        console.log("want to subscribe")
-//            socket.send("subscribe");
-      }
-      // Call onopen directly if socket is already open
-      // if (socket.readyState == WebSocket.OPEN) socket.onopen();
-      //
-      //*/
+      dispatch(loadBlocks());
     },
   };
 }
 
 const mapStateToProps = createStructuredSelector({
-  repos: makeSelectRepos(),
+  blocks: makeSelectBlocks(),
   username: makeSelectUsername(),
   loading: makeSelectLoading(),
   error: makeSelectError(),

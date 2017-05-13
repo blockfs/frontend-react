@@ -3,9 +3,12 @@ import React, { PropTypes } from 'react';
 import List from 'components/List';
 import ListItem from 'components/ListItem';
 import LoadingIndicator from 'components/LoadingIndicator';
-import RepoListItem from 'containers/RepoListItem';
+import BlockListItem from 'containers/BlockListItem';
 
-function ReposList({ loading, error, repos }) {
+function BlocksList({ loading, error, blocks }) {
+
+  console.log("BLOCKLIST: ", blocks)
+
   if (loading) {
     return <List component={LoadingIndicator} />;
   }
@@ -17,17 +20,17 @@ function ReposList({ loading, error, repos }) {
     return <List component={ErrorComponent} />;
   }
 
-  if (repos !== false) {
-    return <List items={repos} component={RepoListItem} />;
+  if (blocks !== false) {
+    return <List items={blocks} component={BlockListItem} />;
   }
 
   return null;
 }
 
-ReposList.propTypes = {
+BlocksList.propTypes = {
   loading: PropTypes.bool,
   error: PropTypes.any,
-  repos: PropTypes.any,
+  blocks: PropTypes.any,
 };
 
-export default ReposList;
+export default BlocksList;
