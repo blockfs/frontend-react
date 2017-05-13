@@ -7,8 +7,8 @@ const Wrapper = styled.div`
   height:300px;
   ul {
     overflow: scroll;
-    padding: 2em;
-    background: white;
+    padding: 2em ;
+    background: white !important;
     li {
       background: white;
     }

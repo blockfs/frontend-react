@@ -18,14 +18,23 @@ const modalStyles = {
     left                  : '50%',
     right                 : 'auto',
     bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
+    transform             : 'translate(-50%, -50%)',
+    backgroundColor       : 'white'
   }
 };
 
 const buttonStyles = {
-    padding: '0px 5px'
-  }
+    padding: '0px 5px',
+    cursor : 'pointer'
+}
+
+const closeButtonStyles = {
+    padding: '5px 5px',
+    marginTop : '2em',
+    cursor : 'pointer',
+    border : '1px solid',
+    float  : 'right'
+}
 
 class BlockModal extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
@@ -67,7 +76,7 @@ class BlockModal extends React.Component { // eslint-disable-line react/prefer-s
              <Wrapper>
                {this.props.content}
              </Wrapper>
-             <button onClick={this.closeModal}>close</button>
+             <button onClick={this.closeModal} style={closeButtonStyles}>X</button>
            </Modal>
          </div>
     );
