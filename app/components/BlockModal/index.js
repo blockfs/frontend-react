@@ -19,7 +19,8 @@ const modalStyles = {
     right                 : 'auto',
     bottom                : 'auto',
     transform             : 'translate(-50%, -50%)',
-    backgroundColor       : 'white'
+    backgroundColor       : 'white',
+    width                 : '60%'
   }
 };
 
