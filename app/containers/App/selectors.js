@@ -26,6 +26,11 @@ const makeSelectBlocks = () => createSelector(
   (globalState) => globalState.getIn(['userData', 'blocks'])
 );
 
+const makeSelectFiles = () => createSelector(
+  selectGlobal,
+  (globalState) => globalState.getIn(['userData', 'files'])
+);
+
 const makeSelectLocationState = () => {
   let prevRoutingState;
   let prevRoutingStateJS;
@@ -48,5 +53,6 @@ export {
   makeSelectLoading,
   makeSelectError,
   makeSelectBlocks,
+  makeSelectFiles,
   makeSelectLocationState,
 };

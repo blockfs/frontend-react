@@ -12,4 +12,7 @@
 export const LOAD_BLOCKS = 'boilerplate/App/LOAD_BLOCKS';
 export const LOAD_BLOCKS_SUCCESS = 'boilerplate/App/LOAD_BLOCKS_SUCCESS';
 export const LOAD_BLOCKS_ERROR = 'boilerplate/App/LOAD_BLOCKS_ERROR';
+export const LOAD_FILES = 'boilerplate/App/LOAD_FILES';
+export const LOAD_FILES_SUCCESS = 'boilerplate/App/LOAD_FILES_SUCCESS';
+export const LOAD_FILES_ERROR = 'boilerplate/App/LOAD_FILES_ERROR';
 export const DEFAULT_LOCALE = 'en';
