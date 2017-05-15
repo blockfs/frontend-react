@@ -20,7 +20,7 @@ import Form from './Form';
 import Input from './Input';
 import Section from './Section';
 import messages from './messages';
-import { loadBlocks } from '../App/actions';
+import { loadBlocks, blocksLoaded } from '../App/actions';
 import { changeUsername } from './actions';
 import { makeSelectUsername } from './selectors';
 import Wrapper from './Wrapper';
@@ -30,13 +30,16 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   constructor(properties) {
     super(properties);
     this.state = {loading: true, error: false, blocks: []};
+    this.setSocketConnection = this.setSocketConnection.bind(this)
   }
 
   componentDidMount() {
+    // this.props.showBlocks()
     this.setSocketConnection()
   }
 
   setSocketConnection(){
+    // console.log(this.props.loadedBlocks)
     const socket = new WebSocket("ws://" + '127.0.0.1:8000' + "/chat/");
     console.log("I am starting socket")
     socket.onmessage = (e) => {
@@ -50,6 +53,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
              allBlocks.unshift(data)
              this.setState({blocks: allBlocks, loading: false})
              console.log("STATE BLOCKS: ", this.state.blocks)
+             this.props.loadedBlocks(allBlocks)
              this.forceUpdate()
            }
         }
@@ -63,6 +67,14 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
   }
 
   render() {
+
+    const { loading, error, blocks } = this.props;
+    const BlockListProps = {
+      loading,
+      error,
+      blocks,
+    };
+
     return (
       <article>
         <Helmet
@@ -110,6 +122,9 @@ HomePage.propTypes = {
 
 export function mapDispatchToProps(dispatch) {
   return {
+    loadedBlocks: (blocks) => {
+      dispatch(blocksLoaded(blocks));
+    },
     showBlocks: (evt) => {
       if (evt !== undefined && evt.preventDefault) evt.preventDefault();
       dispatch(loadBlocks());

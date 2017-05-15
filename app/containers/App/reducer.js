@@ -38,8 +38,7 @@ function appReducer(state = initialState, action) {
     case LOAD_BLOCKS_SUCCESS:
       return state
         .setIn(['userData', 'blocks'], action.blocks)
-        .set('loading', false)
-        .set('currentUser', action.username);
+        .set('loading', false);
     case LOAD_BLOCKS_ERROR:
       return state
         .set('error', action.error)

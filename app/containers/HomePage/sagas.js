@@ -2,9 +2,9 @@
  * Gets the repositories of the user from Github
  */
 
-import { take, call, put, select, cancel, takeLatest } from 'redux-saga/effects';
+import { take, call, put, select, cancel, takeLatest, takeEvery } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { LOAD_BLOCKS } from 'containers/App/constants';
+import { LOAD_BLOCKS, LOAD_BLOCKS_SUCCESS } from 'containers/App/constants';
 import { blocksLoaded, blocksLoadingError } from 'containers/App/actions';
 
 import request from 'utils/request';
@@ -39,6 +39,10 @@ export function* getBlocks() {
   */
 }
 
+export function* setBlocks(blocks){
+  //
+}
+
 /**
  * Root saga manages watcher lifecycle
  */
@@ -46,7 +50,9 @@ export function* blockchainData() {
   // Watches for LOAD_BLOCKS actions and calls getBlocks when one comes in.
   // By using `takeLatest` only the result of the latest API call is applied.
   // It returns task descriptor (just like fork) so we can continue execution
-  const watcher = yield takeLatest(LOAD_BLOCKS, getBlocks);
+  // const watcher = yield takeEvery(LOAD_BLOCKS, getBlocks);
+
+  const watcher = yield takeEvery(LOAD_BLOCKS_SUCCESS, setBlocks);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
