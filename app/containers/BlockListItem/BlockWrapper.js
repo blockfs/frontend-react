@@ -1,13 +1,15 @@
 import styled from 'styled-components';
 
-import A from 'components/A';
 
-const RepoLink = styled(A)`
+const BlockWrapper = styled.div`
   height: 100%;
+  background-color: lightblue;
+  margin: 20px;
+  padding: 20px;
   color: black;
   display: flex;
   align-items: center;
   width: 100%;
 `;
 
-export default RepoLink;
+export default BlockWrapper;

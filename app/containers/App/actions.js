@@ -16,48 +16,46 @@
  */
 
 import {
-  LOAD_REPOS,
-  LOAD_REPOS_SUCCESS,
-  LOAD_REPOS_ERROR,
+  LOAD_BLOCKS,
+  LOAD_BLOCKS_SUCCESS,
+  LOAD_BLOCKS_ERROR,
 } from './constants';
 
 /**
- * Load the repositories, this action starts the request saga
+ * Load the blocks, this action starts the request saga
  *
- * @return {object} An action object with a type of LOAD_REPOS
+ * @return {object} An action object with a type of LOAD_BLOCKS
  */
-export function loadRepos() {
+export function loadBlocks() {
   return {
-    type: LOAD_REPOS,
+    type: LOAD_BLOCKS,
   };
 }
 
 /**
- * Dispatched when the repositories are loaded by the request saga
+ * Dispatched when the blocks are loaded by the request saga
  *
- * @param  {array} repos The repository data
- * @param  {string} username The current username
+ * @param  {array} blocks The blocks data
  *
- * @return {object}      An action object with a type of LOAD_REPOS_SUCCESS passing the repos
+ * @return {object}      An action object with a type of LOAD_BLOCKS_SUCCESS passing the blocks
  */
-export function reposLoaded(repos, username) {
+export function blocksLoaded(blocks) {
   return {
-    type: LOAD_REPOS_SUCCESS,
-    repos,
-    username,
+    type: LOAD_BLOCKS_SUCCESS,
+    blocks
   };
 }
 
 /**
- * Dispatched when loading the repositories fails
+ * Dispatched when loading the blocks fails
  *
  * @param  {object} error The error
  *
- * @return {object}       An action object with a type of LOAD_REPOS_ERROR passing the error
+ * @return {object}       An action object with a type of LOAD_BLOCKS_ERROR passing the error
  */
-export function repoLoadingError(error) {
+export function blocksLoadingError(error) {
   return {
-    type: LOAD_REPOS_ERROR,
+    type: LOAD_BLOCKS_ERROR,
     error,
   };
 }
