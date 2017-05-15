@@ -54,6 +54,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
              this.setState({blocks: allBlocks, loading: false})
              console.log("STATE BLOCKS: ", this.state.blocks)
              this.props.loadedBlocks(allBlocks)
+             // TODO: put this into a natural data flow without forceUpdate
              this.forceUpdate()
            }
         }
