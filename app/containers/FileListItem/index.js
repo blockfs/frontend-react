@@ -16,7 +16,6 @@ import LineWrapper from './LineWrapper';
 import File from './File';
 import Dir from './Dir';
 
-
 export class FileListItem extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
   render() {

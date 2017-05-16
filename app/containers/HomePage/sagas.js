@@ -48,7 +48,7 @@ export function* getFiles(){
   const username = yield select(makeSelectUsername());
   const requestURL = `http://127.0.0.1:8000/blockfs/rpc/`;
   try {
-      const options =
+      let options =
         {
           method: 'POST',
           headers: {
@@ -60,9 +60,24 @@ export function* getFiles(){
             params: {path: '/'},
           })
         }
-      const files = yield call(request, requestURL, options);
+      const result = yield call(request, requestURL, options);
+      const files = result.result
+
+      // use rpc end point to get detailed info of the file
+      // does not look like the endpoint works
+      // for (var i = 0; i < files.length; i++) {
+      //     options.body = JSON.stringify({
+      //       cmd: 'more',
+      //       params: {path: files[i].name},
+      //     })
+      //     console.log(options)
+      //     let response = yield call(request, requestURL, options)
+      //     console.log(response)
+      //     files[i].time = response.result
+      //
+      // }
       // console.log('getFiles OK: ', files)
-      yield put(filesLoaded(files.result));
+      yield put(filesLoaded(result.result));
     } catch (err) {
       // console.log("getFiles ERR: ", err)
       yield put(filesLoadingError(err));
