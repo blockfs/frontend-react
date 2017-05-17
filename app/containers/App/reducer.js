@@ -16,6 +16,9 @@ import {
   LOAD_BLOCKS_SUCCESS,
   LOAD_BLOCKS,
   LOAD_BLOCKS_ERROR,
+  LOAD_FILES_SUCCESS,
+  LOAD_FILES,
+  LOAD_FILES_ERROR
 } from './constants';
 
 // The initial state of the App
@@ -43,6 +46,15 @@ function appReducer(state = initialState, action) {
       return state
         .set('error', action.error)
         .set('loading', false);
+    case LOAD_FILES:
+      return state
+        .setIn(['userData', 'files'], false);
+    case LOAD_FILES_SUCCESS:
+      return state
+        .setIn(['userData', 'files'], action.files);
+    case LOAD_FILES_ERROR:
+      return state
+        .set('error', action.error);
     default:
       return state;
   }

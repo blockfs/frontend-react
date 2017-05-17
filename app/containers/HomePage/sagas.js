@@ -4,8 +4,8 @@
 
 import { take, call, put, select, cancel, takeLatest, takeEvery } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'react-router-redux';
-import { LOAD_BLOCKS, LOAD_BLOCKS_SUCCESS } from 'containers/App/constants';
-import { blocksLoaded, blocksLoadingError } from 'containers/App/actions';
+import { LOAD_BLOCKS, LOAD_BLOCKS_SUCCESS, LOAD_FILES } from 'containers/App/constants';
+import { blocksLoaded, blocksLoadingError, filesLoaded, filesLoadingError } from 'containers/App/actions';
 
 import request from 'utils/request';
 import { makeSelectUsername } from 'containers/HomePage/selectors';
@@ -43,6 +43,47 @@ export function* setBlocks(blocks){
   //
 }
 
+export function* getFiles(){
+
+  const username = yield select(makeSelectUsername());
+  const requestURL = `http://127.0.0.1:8000/blockfs/rpc/`;
+  try {
+      let options =
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic '+btoa('root:blockseer')
+          },
+          body: JSON.stringify({
+            cmd: 'ls',
+            params: {path: '/'},
+          })
+        }
+      const result = yield call(request, requestURL, options);
+      const files = result.result
+
+      // use rpc end point to get detailed info of the file
+      // does not look like the endpoint works
+      // for (var i = 0; i < files.length; i++) {
+      //     options.body = JSON.stringify({
+      //       cmd: 'more',
+      //       params: {path: files[i].name},
+      //     })
+      //     console.log(options)
+      //     let response = yield call(request, requestURL, options)
+      //     console.log(response)
+      //     files[i].time = response.result
+      //
+      // }
+      // console.log('getFiles OK: ', files)
+      yield put(filesLoaded(result.result));
+    } catch (err) {
+      // console.log("getFiles ERR: ", err)
+      yield put(filesLoadingError(err));
+    }
+}
+
 /**
  * Root saga manages watcher lifecycle
  */
@@ -50,9 +91,9 @@ export function* blockchainData() {
   // Watches for LOAD_BLOCKS actions and calls getBlocks when one comes in.
   // By using `takeLatest` only the result of the latest API call is applied.
   // It returns task descriptor (just like fork) so we can continue execution
-  // const watcher = yield takeEvery(LOAD_BLOCKS, getBlocks);
+  const watcher = yield takeEvery(LOAD_FILES, getFiles);
 
-  const watcher = yield takeEvery(LOAD_BLOCKS_SUCCESS, setBlocks);
+  // const watcher = yield takeEvery(LOAD_BLOCKS_SUCCESS, setBlocks);
 
   // Suspend execution until location changes
   yield take(LOCATION_CHANGE);
