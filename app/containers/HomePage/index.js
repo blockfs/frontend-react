@@ -10,17 +10,17 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 
-import { makeSelectBlocks, makeSelectLoading, makeSelectError } from 'containers/App/selectors';
+import { makeSelectBlocks, makeSelectFiles, makeSelectLoading, makeSelectError } from 'containers/App/selectors';
 import H2 from 'components/H2';
 import BlocksList from 'components/BlocksList';
-import BlockListItem from 'containers/BlockListItem';
+import FilesList from 'components/FilesList';
 import AtPrefix from './AtPrefix';
 import CenteredSection from './CenteredSection';
 import Form from './Form';
 import Input from './Input';
 import Section from './Section';
 import messages from './messages';
-import { loadBlocks, blocksLoaded } from '../App/actions';
+import { loadBlocks, blocksLoaded, loadFiles } from '../App/actions';
 import { changeUsername } from './actions';
 import { makeSelectUsername } from './selectors';
 import Wrapper from './Wrapper';
@@ -29,17 +29,16 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
 
   constructor(properties) {
     super(properties);
-    this.state = {loading: true, error: false, blocks: []};
+    this.state = {loading: true, error: false, blocks: [], files: []};
     this.setSocketConnection = this.setSocketConnection.bind(this)
   }
 
   componentDidMount() {
-    // this.props.showBlocks()
     this.setSocketConnection()
+    this.props.showFiles()
   }
 
   setSocketConnection(){
-    // console.log(this.props.loadedBlocks)
     const socket = new WebSocket("ws://" + '127.0.0.1:8000' + "/chat/");
     console.log("I am starting socket")
     socket.onmessage = (e) => {
@@ -53,9 +52,9 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
              allBlocks.unshift(data)
              this.setState({blocks: allBlocks, loading: false})
              console.log("STATE BLOCKS: ", this.state.blocks)
+             // assume there's need to refresh file list everytime we hear something from socket
+             this.props.showFiles()
              this.props.loadedBlocks(allBlocks)
-             // TODO: put this into a natural data flow without forceUpdate
-             this.forceUpdate()
            }
         }
     }
@@ -76,6 +75,12 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       blocks,
     };
 
+    const { files } = this.props;
+    const FileListProps = {
+      error,
+      files,
+    };
+
     return (
       <article>
         <Helmet
@@ -84,26 +89,20 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             { name: '', content: '' },
           ]}
         />
-        <div>
-          {
-          // <CenteredSection>
-          //   <H2>
-          //     <FormattedMessage {...messages.startProjectHeader} />
-          //   </H2>
-          //   <p>
-          //     <FormattedMessage {...messages.startProjectMessage} />
-          //   </p>
-          // </CenteredSection>
-          }
-          <Section>
+        <Section>
+          <Wrapper>
+            <H2>
+              Files
+            </H2>
+            <FilesList {...FileListProps} />
+          </Wrapper>
+          <Wrapper>
             <H2>
               Blocks
             </H2>
-            <Wrapper>
-              <BlocksList {...this.state} />
-            </Wrapper>
-          </Section>
-        </div>
+            <BlocksList {...BlockListProps} />
+          </Wrapper>
+        </Section>
       </article>
     );
   }
@@ -130,11 +129,16 @@ export function mapDispatchToProps(dispatch) {
       if (evt !== undefined && evt.preventDefault) evt.preventDefault();
       dispatch(loadBlocks());
     },
+    showFiles: (evt) => {
+      if (evt !== undefined && evt.preventDefault) evt.preventDefault();
+      dispatch(loadFiles());
+    },
   };
 }
 
 const mapStateToProps = createStructuredSelector({
   blocks: makeSelectBlocks(),
+  files: makeSelectFiles(),
   username: makeSelectUsername(),
   loading: makeSelectLoading(),
   error: makeSelectError(),

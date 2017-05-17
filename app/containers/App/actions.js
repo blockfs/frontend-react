@@ -19,6 +19,9 @@ import {
   LOAD_BLOCKS,
   LOAD_BLOCKS_SUCCESS,
   LOAD_BLOCKS_ERROR,
+  LOAD_FILES,
+  LOAD_FILES_SUCCESS,
+  LOAD_FILES_ERROR
 } from './constants';
 
 /**
@@ -56,6 +59,45 @@ export function blocksLoaded(blocks) {
 export function blocksLoadingError(error) {
   return {
     type: LOAD_BLOCKS_ERROR,
+    error,
+  };
+}
+
+/**
+ * Load the blocks, this action starts the request saga
+ *
+ * @return {object} An action object with a type of LOAD_BLOCKS
+ */
+export function loadFiles() {
+  return {
+    type: LOAD_FILES,
+  };
+}
+
+/**
+ * Dispatched when the blocks are loaded by the request saga
+ *
+ * @param  {array} blocks The blocks data
+ *
+ * @return {object}      An action object with a type of LOAD_BLOCKS_SUCCESS passing the blocks
+ */
+export function filesLoaded(files) {
+  return {
+    type: LOAD_FILES_SUCCESS,
+    files
+  };
+}
+
+/**
+ * Dispatched when loading the blocks fails
+ *
+ * @param  {object} error The error
+ *
+ * @return {object}       An action object with a type of LOAD_BLOCKS_ERROR passing the error
+ */
+export function filesLoadingError(error) {
+  return {
+    type: LOAD_FILES_ERROR,
     error,
   };
 }
