@@ -4,7 +4,7 @@ npm run setup
 or
 ```
 npm start
-
+```
 
 
 before using it, you have to create a user (root:blockseer) that have access to the json rpc endpoints
