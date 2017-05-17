@@ -50,9 +50,9 @@ rm('-rf', 'internals/templates');
 addCheckMark();
 
 // Commit the changes
-/if (exec('git add . --all && git commit -qm "Remove default example"').code !== 0) {
-/  echo('\nError: Git commit failed');
-/  exit(1);
-/}
+//if (exec('git add . --all && git commit -qm "Remove default example"').code !== 0) {
+//  echo('\nError: Git commit failed');
+//  exit(1);
+//}
 
 echo('\nCleanup done. Happy Coding!!!');
