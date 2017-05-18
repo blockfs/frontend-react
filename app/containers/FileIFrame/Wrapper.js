@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const IFrameWrapper = styled.div`
+const Wrapper = styled.div`
   width: 98%;
   margin: 1%;
   min-height: 100%;
@@ -8,4 +8,4 @@ const IFrameWrapper = styled.div`
   display: inline-block;
 `;
 
-export default IFrameWrapper;
+export default Wrapper;

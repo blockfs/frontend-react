@@ -24,7 +24,7 @@ import { loadBlocks, blocksLoaded, loadFiles } from '../App/actions';
 import { changeUsername } from './actions';
 import { makeSelectUsername } from './selectors';
 import Wrapper from './Wrapper';
-import IFrameWrapper from './IFrameWrapper';
+import FileIFrame from 'containers/FileIFrame';
 
 export class HomePage extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
@@ -82,12 +82,6 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
       files,
     };
 
-    const iframeStyle = {
-      width: '100%',
-      minHeight: '20em',
-      'overFlow': 'scroll'
-    }
-
     return (
       <article>
         <Helmet
@@ -109,9 +103,7 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
             </H2>
             <BlocksList {...BlockListProps} />
           </Wrapper>
-          <IFrameWrapper key={FileListProps.files ? FileListProps.files.length : -1}>
-            <iframe src="http://127.0.0.1:8002/" style={iframeStyle}/>
-          </IFrameWrapper>
+          <FileIFrame iframeKey={FileListProps.files ? FileListProps.files.length : -1} />
         </Section>
       </article>
     );
