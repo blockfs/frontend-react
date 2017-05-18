@@ -63,19 +63,20 @@ export function* getFiles(){
       const result = yield call(request, requestURL, options);
       const files = result.result
 
+
       // use rpc end point to get detailed info of the file
-      // does not look like the endpoint works
-      // for (var i = 0; i < files.length; i++) {
-      //     options.body = JSON.stringify({
-      //       cmd: 'more',
-      //       params: {path: files[i].name},
-      //     })
-      //     console.log(options)
-      //     let response = yield call(request, requestURL, options)
-      //     console.log(response)
-      //     files[i].time = response.result
-      //
-      // }
+      for (var i = 0; i < files.length; i++) {
+        if (files[i].type == 'd'){
+          continue
+        }
+        options.body = JSON.stringify({
+          cmd: 'read',
+          params: {path: files[i].name},
+        })
+        console.log(options)
+        let response = yield call(request, requestURL, options)
+        files[i].info = response.result
+      }
       // console.log('getFiles OK: ', files)
       yield put(filesLoaded(result.result));
     } catch (err) {

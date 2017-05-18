@@ -25,7 +25,7 @@ export class FileListItem extends React.PureComponent { // eslint-disable-line r
       content = (
         <Wrapper>
           <LineWrapper key={file.id}>
-            {file.type == 'd' ? <Dir>{file.name}</Dir> : <File>{file.name}</File>}
+            {file.type == 'd' ? <Dir>{file.name}</Dir> : <File>{file.name} ({file.info.substring(0,20)}...)</File>}
           </LineWrapper>
         </Wrapper>
       );
