@@ -63,7 +63,6 @@ export function* getFiles(){
       const result = yield call(request, requestURL, options);
       const files = result.result
 
-
       // use rpc end point to get detailed info of the file
       for (var i = 0; i < files.length; i++) {
         if (files[i].type == 'd'){
@@ -73,12 +72,11 @@ export function* getFiles(){
           cmd: 'read',
           params: {path: files[i].name},
         })
-        console.log(options)
         let response = yield call(request, requestURL, options)
         files[i].info = response.result
       }
       // console.log('getFiles OK: ', files)
-      yield put(filesLoaded(result.result));
+      yield put(filesLoaded(files));
     } catch (err) {
       // console.log("getFiles ERR: ", err)
       yield put(filesLoadingError(err));

@@ -24,8 +24,7 @@ export class BlockListItem extends React.PureComponent { // eslint-disable-line 
     const content = (
       <Wrapper>
         <BlockWrapper>
-          Block {block.block_number} : ({block.created_at})
-          <BlockModal title={`Block ${block.block_number} Detailed Info`} content={modalContent}/>
+          <BlockModal title={`Block ${block.block_number} : (${block.created_at})`} content={modalContent}/>
         </BlockWrapper>
       </Wrapper>
     );

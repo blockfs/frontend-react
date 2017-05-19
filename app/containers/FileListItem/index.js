@@ -15,6 +15,8 @@ import Wrapper from './Wrapper';
 import LineWrapper from './LineWrapper';
 import File from './File';
 import Dir from './Dir';
+import BlockModal from 'components/BlockModal';
+import JSONTree from 'react-json-tree'
 
 export class FileListItem extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
 
@@ -22,10 +24,17 @@ export class FileListItem extends React.PureComponent { // eslint-disable-line r
     const file = this.props.item
     let content = ''
     if (file) {
+      const modalContent = <JSONTree data={file} invertTheme={true} />
       content = (
         <Wrapper>
           <LineWrapper key={file.id}>
-            {file.type == 'd' ? <Dir>{file.name}</Dir> : <File>{file.name} ({file.info.substring(0,20)}...)</File>}
+            {file.type == 'd' ?
+              <Dir>
+                <BlockModal title={`${file.name}`} content={modalContent}/>
+              </Dir> :
+              <File>
+                <BlockModal title={`${file.name}`} content={modalContent}/>
+              </File>}
           </LineWrapper>
         </Wrapper>
       );

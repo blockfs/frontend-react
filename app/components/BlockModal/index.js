@@ -65,13 +65,13 @@ class BlockModal extends React.Component { // eslint-disable-line react/prefer-s
   render() {
     return (
       <div>
-           <button onClick={this.openModal} style={buttonStyles}> <MdHelpOutline /> </button>
+           <button onClick={this.openModal} style={buttonStyles}> {this.props.title} </button>
            <Modal
              isOpen={this.state.modalIsOpen}
              onAfterOpen={this.afterOpenModal}
              onRequestClose={this.closeModal}
              style={modalStyles}
-             contentLabel={this.props.title}
+             contentLabel=''
            >
              <h2>{this.props.title}</h2>
              <Wrapper>
